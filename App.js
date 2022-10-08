@@ -1,5 +1,5 @@
 import * as React from 'react';
-import MapView, { Callout, Marker } from 'react-native-maps';
+import MapView, { Callout, Circle, Marker } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 
 export default function App() {
@@ -25,6 +25,14 @@ export default function App() {
             <Text>I'm Here!</Text>
           </Callout>
         </Marker>
+        <Circle 
+          center={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+          }}
+          radius={1000}
+          strokeColor="blue"
+        />
       </MapView>
     </View>
   );
