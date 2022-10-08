@@ -9,18 +9,36 @@ export default function App() {
     latitude: 37.78825,
     longitude: -122.4324,
   })
+  const [region, setRegion] = React.useState({
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  })
 
   return (
     <View style={{flex: 1}}>
       <GooglePlacesAutocomplete
         placeholder='Search...'
+        fetchDetails={true}
+        autoFocus={true}
+        GooglePlacesSearchQuery={{
+          rankby: "distance"
+        }}
         onPress={(data, details = null) => {
           // 'details' is provided when fetchDetails = true
           console.log(data, details);
+          setPin({
+            latitude: details.geometry.location.lat,
+            longitude: details.geometry.location.lng,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          })
         }}
         query={{
           key: "AIzaSyAM0Qz2KaxfVQTNaiCCtQzQ66rlkUzEv90",
-          language: 'en',        }}
+          language: 'en',
+        }}
         styles = {{
           container: { flex: 0, position: "absolute", width: "95%", zIndex: 1, margin: 10, marginTop: 60},
           listView: { backgroundColor: "white" }
