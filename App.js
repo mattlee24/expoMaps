@@ -1,6 +1,7 @@
 import * as React from 'react';
 import MapView, { Callout, Circle, Marker } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default function App() {
 
@@ -10,7 +11,21 @@ export default function App() {
   })
 
   return (
-    <View style={styles.container}>
+    <View style={{flex: 1}}>
+      <GooglePlacesAutocomplete
+        placeholder='Search...'
+        onPress={(data, details = null) => {
+          // 'details' is provided when fetchDetails = true
+          console.log(data, details);
+        }}
+        query={{
+          key: "AIzaSyAM0Qz2KaxfVQTNaiCCtQzQ66rlkUzEv90",
+          language: 'en',        }}
+        styles = {{
+          container: { flex: 0, position: "absolute", width: "95%", zIndex: 1, margin: 10, marginTop: 60},
+          listView: { backgroundColor: "white" }
+        }}
+      />
       <MapView 
         style={styles.map} 
         initialRegion={{
@@ -19,7 +34,6 @@ export default function App() {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        provider="google"
       >
         <Marker 
           coordinate={pin}
