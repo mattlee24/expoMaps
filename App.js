@@ -31,8 +31,12 @@ export default function App() {
           setPin({
             latitude: details.geometry.location.lat,
             longitude: details.geometry.location.lng,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+          })
+          setRegion({
+            latitude: details.geometry.location.lat,
+            longitude: details.geometry.location.lng,
+            latitudeDelta: 0.0222,
+            longitudeDelta: 0.0221,
           })
         }}
         query={{
@@ -46,12 +50,8 @@ export default function App() {
       />
       <MapView 
         style={styles.map} 
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
+        region={region}
+        showsCompass={false}
       >
         <Marker 
           coordinate={pin}
@@ -65,17 +65,18 @@ export default function App() {
               latitude: e.nativeEvent.coordinate.latitude,
               longitude: e.nativeEvent.coordinate.longitude,
             })
+            setRegion({
+              latitude: e.nativeEvent.coordinate.latitude,
+              longitude: e.nativeEvent.coordinate.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            })
           }}
         >
           <Callout>
             <Text>I'm Here!</Text>
           </Callout>
         </Marker>
-        <Circle 
-          center={pin}
-          radius={1000}
-          strokeColor="blue"
-        />
       </MapView>
     </View>
   );
