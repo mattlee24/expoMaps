@@ -1,6 +1,6 @@
 import * as React from 'react';
-import MapView, { Callout, Circle, Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import MapView, { AnimatedRegion, Callout, Circle, Marker } from 'react-native-maps';
+import { StyleSheet, Text, View, Dimensions, useColorScheme, } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default function App() {
@@ -15,6 +15,9 @@ export default function App() {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   })
+
+  const colourScheme = useColorScheme();
+  const isDarkMode = colourScheme === "dark";
 
   return (
     <View style={{flex: 1}}>
@@ -52,6 +55,7 @@ export default function App() {
         style={styles.map} 
         region={region}
         showsCompass={false}
+        userInterfaceStyle={isDarkMode ? "dark" : "light"}
       >
         <Marker 
           coordinate={pin}
