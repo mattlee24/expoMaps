@@ -14,8 +14,30 @@ export default function App() {
   const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
 
   axiosInstance.get().then((response) => {
-    console.log(response.data[288].title)
+    setData(response.data)
   })
+
+
+
+  const testData = {
+   "98" : {
+      name: "Matt",
+      age: 21,
+      location: {
+        latitude: 58.378051,
+        longitude: -3.435973,
+      },
+    },
+    "92" : {
+      name: "Alex",
+      age: 21,
+      location: {
+        latitude: 52.378051,
+        longitude: -3.435973,
+      },
+    }
+  }
+
 
   const [pin, setPin] = React.useState({
     latitude: 55.378051,
