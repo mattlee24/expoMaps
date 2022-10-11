@@ -1,27 +1,32 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MapView, { AnimatedRegion, Callout, Circle, Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, useColorScheme, } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, useColorScheme, Image} from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import axios from 'axios';
 import DataResult from './data';
 
 export default function App() {
 
-  const [data, setData] = useState({});
-  const [isLoading, setLoading] = useState(true);
-
+  const [ nationalData, setnationalData ] = useState({})
+  
   const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
 
-  axiosInstance.get().then((response) => {
-    console.log(response.data[288].title)
-  })
+  useEffect(() => {
+    axiosInstance.get().then((response) => {
+      setnationalData(response.data[288])
+    })
+  }, [])
 
-  const [pin, setPin] = React.useState({
+  console.log(nationalData.location)
+  console.log(nationalData.title)
+  console.log(nationalData.imageUrl)
+
+  const [pin, setPin] = useState({
     latitude: 55.378051,
     longitude: -3.435973,
   })
-  const [region, setRegion] = React.useState({
+  const [region, setRegion] = useState({
     latitude: 55.378051,
     longitude: -3.435973,
     latitudeDelta: 0.0922,
@@ -32,7 +37,7 @@ export default function App() {
   const isDarkMode = colourScheme === "dark";
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 0, backgroundColor: "white"}}>
       <GooglePlacesAutocomplete
         placeholder='Search...'
         fetchDetails={true}
@@ -42,7 +47,7 @@ export default function App() {
         }}
         onPress={(data, details = null) => {
           // 'details' is provided when fetchDetails = true
-          console.log(data, details);
+          //console.log(data, details);
           setPin({
             latitude: details.geometry.location.lat,
             longitude: details.geometry.location.lng,
@@ -59,10 +64,11 @@ export default function App() {
           language: 'en',
         }}
         styles = {{
-          container: { flex: 0, position: "absolute", width: "95%", zIndex: 1, margin: 10, marginTop: 60},
+          container: { flex: 0, position: "absolute", zIndex: 1, marginTop: 60, margin: 10, width: "95%"},
           listView: { backgroundColor: "white" }
         }}
       />
+  
       <MapView 
         style={styles.map} 
         region={region}
@@ -70,7 +76,10 @@ export default function App() {
         userInterfaceStyle={isDarkMode ? "dark" : "light"}
       >
         <Marker 
-          coordinate={pin}
+          coordinate={nationalData.location}
+          title={nationalData.title}
+          description={nationalData.description}
+          width={10}
           pinColor="blue"
           draggable={true}
           onDragStart={(e) => {
@@ -89,9 +98,6 @@ export default function App() {
             })
           }}
         >
-          <Callout>
-            <Text>I'm Here!</Text>
-          </Callout>
         </Marker>
       </MapView>
     </View>
@@ -107,6 +113,6 @@ const styles = StyleSheet.create({
   },
   map: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    height: (Platform.OS === 'ios') ? Dimensions.get('window').height : "100%",
   },
 });
