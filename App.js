@@ -4,7 +4,6 @@ import MapView, { AnimatedRegion, Callout, Circle, Marker } from 'react-native-m
 import { StyleSheet, Text, View, Dimensions, useColorScheme, Image} from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import axios from 'axios';
-import DataResult from './data';
 
 export default function App() {
 
@@ -14,7 +13,7 @@ export default function App() {
 
   useEffect(() => {
     axiosInstance.get().then((response) => {
-      setnationalData(response.data[288])
+      setnationalData(response.data)
     })
   }, [])
 
@@ -22,10 +21,6 @@ export default function App() {
   console.log(nationalData.title)
   console.log(nationalData.imageUrl)
 
-  const [pin, setPin] = useState({
-    latitude: 55.378051,
-    longitude: -3.435973,
-  })
   const [region, setRegion] = useState({
     latitude: 55.378051,
     longitude: -3.435973,
@@ -47,11 +42,7 @@ export default function App() {
         }}
         onPress={(data, details = null) => {
           // 'details' is provided when fetchDetails = true
-          //console.log(data, details);
-          setPin({
-            latitude: details.geometry.location.lat,
-            longitude: details.geometry.location.lng,
-          })
+          console.log(data, details);
           setRegion({
             latitude: details.geometry.location.lat,
             longitude: details.geometry.location.lng,
@@ -75,30 +66,15 @@ export default function App() {
         showsCompass={false}
         userInterfaceStyle={isDarkMode ? "dark" : "light"}
       >
-        <Marker 
-          coordinate={nationalData.location}
-          title={nationalData.title}
-          description={nationalData.description}
-          width={10}
-          pinColor="blue"
-          draggable={true}
-          onDragStart={(e) => {
-            console.log("Drag Start", e.nativeEvent.coordinate.latitude)
-          }}
-          onDragEnd={(e) => {
-            setPin({
-              latitude: e.nativeEvent.coordinate.latitude,
-              longitude: e.nativeEvent.coordinate.longitude,
-            })
-            setRegion({
-              latitude: e.nativeEvent.coordinate.latitude,
-              longitude: e.nativeEvent.coordinate.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            })
-          }}
-        >
-        </Marker>
+        {Object.values(nationalData).map(index => {
+          return <Marker 
+            coordinate={index.location}
+            title={index.title}
+            description={index.description}
+            width={10}
+            pinColor="blue"
+          />
+        })}
       </MapView>
     </View>
   );
