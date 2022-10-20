@@ -1,82 +1,65 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import MapView, { AnimatedRegion, Callout, Circle, Marker } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, useColorScheme, Image} from 'react-native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import axios from 'axios';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MapScreen from './screens/MapScreen';
+import ListScreen from './screens/ListScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import Ionicons from '@expo/vector-icons/Ionicons';
+
 
 export default function App() {
 
-  const [ nationalData, setnationalData ] = useState({})
-  
-  const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
+  const Tab = createBottomTabNavigator();
 
-  useEffect(() => {
-    axiosInstance.get().then((response) => {
-      setnationalData(response.data)
-    })
-  }, [])
-
-  console.log(nationalData.location)
-  console.log(nationalData.title)
-  console.log(nationalData.imageUrl)
-
-  const [region, setRegion] = useState({
-    latitude: 55.378051,
-    longitude: -3.435973,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  })
-
-  const colourScheme = useColorScheme();
-  const isDarkMode = colourScheme === "dark";
+  /* const colourScheme = useColorScheme();
+  const isDarkMode = colourScheme === "dark"; */
 
   return (
-    <View style={{flex: 0, backgroundColor: "white"}}>
-      <GooglePlacesAutocomplete
-        placeholder='Search...'
-        fetchDetails={true}
-        autoFocus={true}
-        GooglePlacesSearchQuery={{
-          rankby: "distance"
-        }}
-        onPress={(data, details = null) => {
-          // 'details' is provided when fetchDetails = true
-          console.log(data, details);
-          setRegion({
-            latitude: details.geometry.location.lat,
-            longitude: details.geometry.location.lng,
-            latitudeDelta: 0.0222,
-            longitudeDelta: 0.0221,
-          })
-        }}
-        query={{
-          key: "AIzaSyAM0Qz2KaxfVQTNaiCCtQzQ66rlkUzEv90",
-          language: 'en',
-        }}
-        styles = {{
-          container: { flex: 0, position: "absolute", zIndex: 1, marginTop: 60, margin: 10, width: "95%"},
-          listView: { backgroundColor: "white" }
-        }}
-      />
-  
-      <MapView 
-        style={styles.map} 
-        region={region}
-        showsCompass={false}
-        userInterfaceStyle={isDarkMode ? "dark" : "light"}
-      >
-        {Object.values(nationalData).map(index => {
-          return <Marker 
-            coordinate={index.location}
-            title={index.title}
-            description={index.description}
-            width={10}
-            pinColor="blue"
-          />
+    <NavigationContainer>
+      <Tab.Navigator
+        initialRouteName='MapScreen'
+        screenOptions={({route}) => ({
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarStyle: [
+            {
+              bottom: 30,
+              left: 10,
+              right: 10,
+              backgroundColor: "white",
+              borderTopColor: "white",
+              position: "absolute",
+              borderRadius: 15,
+              height: 70,
+              tabBarShowLabel: "true",
+              paddingBottom: 0,
+              ...styles.shadow,},
+            null,
+          ],
+          tabBarIcon: ({ focused }) => {
+            let iconName;
+
+            if (route.name === "MapScreen") {
+              iconName = focused ? "map" : "map-outline"
+            } else if (route.name === "ListScreen") {
+              iconName = focused ? "list" : "list-outline"
+            }   
+            return (
+              <Ionicons
+                name={iconName}
+                size={25}
+                color={"blue"}
+                style={styles.icon}
+              />
+            );
+          }
         })}
-      </MapView>
-    </View>
+      >
+        <Tab.Screen name="MapScreen" component={MapScreen} />
+        <Tab.Screen name="ListScreen" component={ListScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -87,8 +70,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  map: {
-    width: Dimensions.get('window').width,
-    height: (Platform.OS === 'ios') ? Dimensions.get('window').height : "100%",
+  icon: {
+    
   },
+  shadow: {
+    shadowColor: "black",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 5
+  }
 });
