@@ -2,11 +2,23 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Dimensions, useColorScheme, Image} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import MapScreen from './screens/MapScreen';
 import ListScreen from './screens/ListScreen';
+import DetailsScreen from './screens/DetailsScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+function Details() {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator screenOptions={() => ({headerShown: false})}>
+      <Stack.Screen name="ListScreen" component={ListScreen}/>
+      <Stack.Screen name="DetailsScreen" component={DetailsScreen} />
+      <Stack.Screen name="MapScreen" component={MapScreen} />
+    </Stack.Navigator> 
+  )
+}
 
 export default function App() {
 
@@ -40,39 +52,36 @@ export default function App() {
           tabBarIcon: ({ focused }) => {
             let iconName;
 
-            if (route.name === "MapScreen") {
+            if (route.name === "MapScreenTab") {
               iconName = focused ? "map" : "map-outline"
-            } else if (route.name === "ListScreen") {
+            } else if (route.name === "ListScreenTab") {
               iconName = focused ? "list" : "list-outline"
             }   
             return (
               <Ionicons
                 name={iconName}
-                size={25}
-                color={"blue"}
+                size={30}
+                color={"#659136"}
                 style={styles.icon}
               />
             );
           }
         })}
       >
-        <Tab.Screen name="MapScreen" component={MapScreen} />
-        <Tab.Screen name="ListScreen" component={ListScreen} />
+        <Tab.Screen name="MapScreenTab" component={MapScreen} />
+        <Tab.Screen name="ListScreenTab" component={Details} />
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  icon: {
-    
-  },
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: '#fff',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
   shadow: {
     shadowColor: "black",
     shadowOffset: {

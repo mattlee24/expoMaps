@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, Dimensions, useColorScheme, Image} from 'react-
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import axios from 'axios';
 
-const MapScreen = () => {
+const MapScreen = ({navigation}) => {
     const [ nationalData, setnationalData ] = useState({})
   
     const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
@@ -16,11 +16,13 @@ const MapScreen = () => {
         })
     }, [])
 
+    //console.log(nationalData)
+
     const [region, setRegion] = useState({
         latitude: 55.378051,
         longitude: -3.435973,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: 10,
+        longitudeDelta: 10,
       })
     
     const colourScheme = useColorScheme();
@@ -30,6 +32,9 @@ const MapScreen = () => {
         <View style={{flex: 0, backgroundColor: "white"}}>
         <GooglePlacesAutocomplete
           placeholder='Search...'
+          textInputProps={{
+            placeholderTextColor: "grey"
+          }}
           fetchDetails={true}
           autoFocus={true}
           GooglePlacesSearchQuery={{
@@ -62,12 +67,14 @@ const MapScreen = () => {
           userInterfaceStyle={isDarkMode ? "dark" : "light"}
         >
           {Object.values(nationalData).map(index => {
-            return <Marker 
+            return <Marker
+              onPress={() => navigation.navigate("DetailsScreen")}
+              key={index.id} 
               coordinate={index.location}
               title={index.title}
               description={index.description}
               width={10}
-              pinColor="blue"
+              pinColor="#659136"
             />
           })}
         </MapView>
