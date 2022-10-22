@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
       },
       calloutText: {
         color: "white",
+        margin: 5
       },
       callout: {
       }
