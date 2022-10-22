@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react'
 import React from 'react'
 import axios from 'axios';
 import TopList from '../components/topList';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-const ListScreen = ({navigation}) => {
+const ListScreen = ({navigation, route}) => {
 
     const [ nationalData, setnationalData ] = useState({})
   
@@ -25,11 +26,11 @@ const ListScreen = ({navigation}) => {
         keyExtractor={(item) => item.id}
         numColumns={2}
         renderItem={({ item }) => (
-          <Pressable style={styles.main} onPress={() => navigation.navigate("DetailsScreen")}>
+          <Pressable style={styles.main} onPress={() => navigation.push("DetailsScreen", {paramA: item.id})}>
             <Image source={{ uri: item.imageUrl }} style={styles.image}></Image>
             <View style={styles.card}>
                 <Text style={styles.texttitle}>{item.title}</Text>
-                <Text style={styles.textsubtitle}>{item.description}</Text>
+                <Text numberOfLines={2} style={styles.textsubtitle}>{item.description}</Text>
             </View>
           </Pressable>
         )}
@@ -47,17 +48,17 @@ const styles = StyleSheet.create({
   main: {
     width: "48%",
     margin: 4,
+    height: "auto"
   },
   image: {
     width: "100%",
-    height: 130,
+    height: 110,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
   },
   card: {
     backgroundColor: "white",
-    height: 200,
-    marginBottom: 10,
+    height: 150,
     shadowColor: "black",
     width: "100%",
     borderBottomLeftRadius: 25,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   texttitle: {
     marginHorizontal: 5, 
     marginTop: 10,
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: "bold",
     textAlign: "center",
     color: "#007A3B"
@@ -82,6 +83,14 @@ const styles = StyleSheet.create({
       marginHorizontal: 5,
       marginTop: 5,
       textAlign: "center",
-      color: "#007A3B"
+      color: "#007A3B",
+      marginBottom: 10
+  },
+  moreInfo: {
+    alignSelf: "center",
+    margin: 15,
+    color: "#007A3B",
+    fontWeight: "bold",
+    textAlign: "center"
   },
 })

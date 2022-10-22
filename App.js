@@ -9,13 +9,22 @@ import DetailsScreen from './screens/DetailsScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-function Details() {
+function ListDetails() {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator screenOptions={() => ({headerShown: false})}>
       <Stack.Screen name="ListScreen" component={ListScreen}/>
       <Stack.Screen name="DetailsScreen" component={DetailsScreen} />
+    </Stack.Navigator> 
+  )
+}
+
+function MapDetails() {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator screenOptions={() => ({headerShown: false})}>
       <Stack.Screen name="MapScreen" component={MapScreen} />
+      <Stack.Screen name="DetailsScreen" component={DetailsScreen} />
     </Stack.Navigator> 
   )
 }
@@ -68,8 +77,8 @@ export default function App() {
           }
         })}
       >
-        <Tab.Screen name="MapScreenTab" component={MapScreen} />
-        <Tab.Screen name="ListScreenTab" component={Details} />
+        <Tab.Screen name="MapScreenTab" component={MapDetails} />
+        <Tab.Screen name="ListScreenTab" component={ListDetails} />
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import MapView, { AnimatedRegion, Callout, Circle, Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, useColorScheme, Image} from 'react-native';
+import { StyleSheet, Text, View, Dimensions, useColorScheme, Image, Button, Pressable} from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import axios from 'axios';
 
@@ -42,7 +42,7 @@ const MapScreen = ({navigation}) => {
           }}
           onPress={(data, details = null) => {
             // 'details' is provided when fetchDetails = true
-            console.log(data, details);
+            //console.log(data, details);
             setRegion({
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
@@ -51,7 +51,7 @@ const MapScreen = ({navigation}) => {
             })
           }}
           query={{
-            key: "AIzaSyAM0Qz2KaxfVQTNaiCCtQzQ66rlkUzEv90",
+            key: "AIzaSyD60HFa9mBuqDJ_KAlwysZGEkB764K4UbU",
             language: 'en',
           }}
           styles = {{
@@ -68,14 +68,21 @@ const MapScreen = ({navigation}) => {
         >
           {Object.values(nationalData).map(index => {
             return <Marker
-              onPress={() => navigation.navigate("DetailsScreen")}
+              //onPress={() => navigation.navigate("DetailsScreen")}
               key={index.id} 
               coordinate={index.location}
-              title={index.title}
-              description={index.description}
-              width={10}
+              width={"auto"}
+              height={"auto"}
               pinColor="#659136"
-            />
+              onCalloutPress={() => navigation.push("DetailsScreen", {paramA: index.id})}
+            >
+              <Callout style={styles.callout}>
+                <Text style={styles.calloutTitle}>{index.title}</Text>
+                <Pressable style={styles.calloutButton}>
+                  <Text style={styles.calloutText}>Find More</Text>
+                </Pressable>
+              </Callout>
+            </Marker>
           })}
         </MapView>
       </View>
@@ -95,5 +102,18 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
         height: (Platform.OS === 'ios') ? Dimensions.get('window').height : "100%",
       },
+      calloutTitle: {
+        fontWeight: "bold"
+      },
+      calloutButton: {
+        backgroundColor: "#659136",
+        alignItems: "center",
+        borderRadius: 25,
+      },
+      calloutText: {
+        color: "white",
+      },
+      callout: {
+      }
 })
 

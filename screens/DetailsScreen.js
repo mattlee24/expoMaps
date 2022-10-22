@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const DetailsScreen = () => {
+const DetailsScreen = ({route}) => {
   return (
     <View style={styles.container}>
-      <Text>DetailsScreen</Text>
+      <Text>{route.params.paramA}</Text>
     </View>
   )
 }
