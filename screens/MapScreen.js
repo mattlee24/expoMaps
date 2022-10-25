@@ -65,6 +65,7 @@ const MapScreen = ({navigation}) => {
           region={region}
           showsCompass={false}
           userInterfaceStyle={isDarkMode ? "dark" : "light"}
+          loadingEnabled={true}
         >
           {Object.values(nationalData).map(index => {
             return <Marker
@@ -115,6 +116,7 @@ const styles = StyleSheet.create({
         margin: 5
       },
       callout: {
+        
       }
 })
 
