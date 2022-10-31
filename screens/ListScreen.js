@@ -1,6 +1,5 @@
-import { StyleSheet, Text, View, Pressable, Image, FlatList } from 'react-native'
-import { useState, useEffect } from 'react'
-import React from 'react'
+import { StyleSheet, Text, View, Pressable, Image, FlatList, TextInput } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import TopList from '../components/topList';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -8,25 +7,57 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 const ListScreen = ({navigation, route}) => {
 
     const [ nationalData, setnationalData ] = useState({})
+    const [ refreshing, serRefreshing ] = useState(false)
+    const [value, onChangeText] = useState('')
+    const [ localData, setlocalData ] = useState({})
   
     const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
 
     useEffect(() => {
-        axiosInstance.get().then((response) => {
-            setnationalData(response.data)
-        })
+      axiosInstance.get().then((response) => {
+          setnationalData(Object.values(response.data))
+          setlocalData(Object.values(response.data))
+      })
     }, [])
+
+    const handleSearch = (text) => { 
+      onChangeText(text);
+      let items = localData;
+      let newData = items;
+
+      if (text) {
+        newData = items.filter(item => {
+        console.log(item)
+        const itemData = item.title.toLowerCase();
+        const textData = text.toLowerCase();
+        
+        return itemData.indexOf(textData) > -1; 
+        });
+      } 
+
+      console.log(text)
+
+      setnationalData(newData);
+      }
 
   return (
     <View style={styles.container}>
       <TopList />
+      <TextInput
+        style={styles.textInputStyle}
+        onChangeText={(text) => handleSearch(text)}
+        underlineColorAndroid="transparent"
+        value={value}
+        placeholder="Search by name..."
+        placeholderTextColor={"grey"}
+      />
       <FlatList 
-        data={Object.values(nationalData)}
+        data={nationalData}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         numColumns={2}
         renderItem={({ item }) => (
-          <Pressable style={styles.main} onPress={() => navigation.push("DetailsScreen", {paramA: item.id})}>
+          <Pressable style={styles.main} onPress={() => navigation.push("DetailsScreen", {paramA: item.id, paramB: item.location})}>
             <Image source={{ uri: item.imageUrl }} style={styles.image}></Image>
             <View style={styles.card}>
                 <Text style={styles.texttitle}>{item.title}</Text>
@@ -34,6 +65,7 @@ const ListScreen = ({navigation, route}) => {
             </View>
           </Pressable>
         )}
+        //refreshing={refreshing}
       />
     </View>
   )
@@ -92,5 +124,12 @@ const styles = StyleSheet.create({
     color: "#007A3B",
     fontWeight: "bold",
     textAlign: "center"
+  },
+  textInputStyle: {
+    height: 40,
+    paddingLeft: 20,
+    margin: 5,
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
   },
 })

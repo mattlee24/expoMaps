@@ -75,7 +75,7 @@ const MapScreen = ({navigation}) => {
               width={"auto"}
               height={"auto"}
               pinColor="#659136"
-              onCalloutPress={() => navigation.push("DetailsScreen", {paramA: index.id})}
+              onCalloutPress={() => navigation.push("DetailsScreen", {paramA: index.id, paramB: index.location})}
             >
               <Callout style={styles.callout}>
                 <Text style={styles.calloutTitle}>{index.title}</Text>
