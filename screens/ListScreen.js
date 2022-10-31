@@ -27,15 +27,12 @@ const ListScreen = ({navigation, route}) => {
 
       if (text) {
         newData = items.filter(item => {
-        console.log(item)
         const itemData = item.title.toLowerCase();
         const textData = text.toLowerCase();
         
         return itemData.indexOf(textData) > -1; 
         });
-      } 
-
-      console.log(text)
+      }
 
       setnationalData(newData);
       }
@@ -52,6 +49,7 @@ const ListScreen = ({navigation, route}) => {
         placeholderTextColor={"grey"}
       />
       <FlatList 
+        style={styles.flatlist}
         data={nationalData}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id}
@@ -132,4 +130,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
   },
+  flatlist: {
+    marginBottom: 100,
+  }
 })
