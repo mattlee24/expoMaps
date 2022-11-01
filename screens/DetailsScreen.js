@@ -37,7 +37,7 @@ const DetailsScreen = ({route, navigation}) => {
         <ScrollView>
             <View style={styles.container}>
                 <View style={styles.topView}>
-                    <Image source={{ uri: placeData.imageUrl }} style={styles.image}></Image>
+                    <Image source={{ uri: placeData.imageUrl }} style={styles.image} accessibilityLabel={placeData.imageDescription}></Image>
                     <View style={styles.titleview}>
                         <Pressable onPress={() => navigation.goBack()} style={styles.buttonback}>
                             <Ionicons name={"arrow-back-circle"} size={35} color={"#007A3B"}/>

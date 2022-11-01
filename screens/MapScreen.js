@@ -38,11 +38,11 @@ const MapScreen = ({navigation}) => {
           fetchDetails={true}
           autoFocus={true}
           GooglePlacesSearchQuery={{
-            rankby: "distance"
+            rankby: "distance",
           }}
           onPress={(data, details = null) => {
-            // 'details' is provided when fetchDetails = true
-            //console.log(data, details);
+            //'details' is provided when fetchDetails = true
+            //console.log(details);
             setRegion({
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
@@ -53,6 +53,7 @@ const MapScreen = ({navigation}) => {
           query={{
             key: "AIzaSyD60HFa9mBuqDJ_KAlwysZGEkB764K4UbU",
             language: 'en',
+            components: 'country:uk',
           }}
           styles = {{
             container: { flex: 0, position: "absolute", zIndex: 1, marginTop: 60, margin: 10, width: "95%"},
