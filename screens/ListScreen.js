@@ -3,8 +3,35 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import TopList from '../components/topList';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import * as Location from 'expo-location';
+import { getDistance } from 'geolib';
 
 const ListScreen = ({navigation, route}) => {
+
+    const [location, setLocation] = useState(null);
+    const [errorMsg, setErrorMsg] = useState(null);
+
+    useEffect(() => {
+      (async () => {
+        
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          setErrorMsg('Permission to access location was denied');
+          return;
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+      })();
+    }, []);
+
+    let text = 'Waiting..';
+    if (errorMsg) {
+      text = errorMsg;
+    } else if (location) {
+      text = JSON.stringify(location);
+      //console.log(location)
+    }
 
     const [ nationalData, setnationalData ] = useState({})
     const [ refreshing, serRefreshing ] = useState(false)
@@ -21,6 +48,7 @@ const ListScreen = ({navigation, route}) => {
     }, [])
 
     const handleSearch = (text) => { 
+      //console.log(text)
       onChangeText(text);
       let items = localData;
       let newData = items;
@@ -37,6 +65,15 @@ const ListScreen = ({navigation, route}) => {
       setnationalData(newData);
       }
 
+      const calculateDistance = () => {
+        var dis = getDistance(
+          { latitude: 51.528308, longitude: -0.3817765 },
+          { latitude: 51.528308, longitude: -0.3817765 }
+        );
+        console.log(`Distance\n\n${dis} Meters\nOR\n${dis / 1609} Miles`);
+      };
+      
+      calculateDistance();
   return (
     <View style={styles.container}>
       <TopList />

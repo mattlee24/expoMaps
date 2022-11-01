@@ -1,11 +1,41 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import MapView, { AnimatedRegion, Callout, Circle, Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, useColorScheme, Image, Button, Pressable} from 'react-native';
+import { StyleSheet, Text, View, Dimensions, useColorScheme, Image, Button, Pressable, Alert} from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import axios from 'axios';
+import * as Location from 'expo-location';
+import { getDistance } from 'geolib';
 
 const MapScreen = ({navigation}) => {
+
+  //Enables Permissions to show user location
+
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
+  let text = 'Waiting..';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+    //console.log(location)
+  }
+
     const [ nationalData, setnationalData ] = useState({})
   
     const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
@@ -27,6 +57,16 @@ const MapScreen = ({navigation}) => {
     
     const colourScheme = useColorScheme();
     const isDarkMode = colourScheme === "dark";
+
+    const calculateDistance = () => {
+      var dis = getDistance(
+        { latitude: 51.528308, longitude: -0.3817765 },
+        { latitude: 51.528308, longitude: -0.3817765 }
+      );
+      console.log(`Distance\n\n${dis} Meters\nOR\n${dis / 1609} Miles`);
+    };
+    
+    calculateDistance();
 
     return (
         <View style={{flex: 0, backgroundColor: "white"}}>
@@ -67,6 +107,7 @@ const MapScreen = ({navigation}) => {
           showsCompass={false}
           userInterfaceStyle={isDarkMode ? "dark" : "light"}
           loadingEnabled={true}
+          showsUserLocation={true}
         >
           {Object.values(nationalData).map(index => {
             return <Marker
