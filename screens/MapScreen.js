@@ -63,7 +63,7 @@ const MapScreen = ({navigation}) => {
         { latitude: 51.528308, longitude: -0.3817765 },
         { latitude: 51.528308, longitude: -0.3817765 }
       );
-      console.log(`Distance\n\n${dis} Meters\nOR\n${dis / 1609} Miles`);
+      //console.log(`Distance\n\n${dis} Meters\nOR\n${dis / 1609} Miles`);
     };
     
     calculateDistance();

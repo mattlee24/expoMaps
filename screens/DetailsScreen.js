@@ -1,11 +1,42 @@
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, Pressable, ImageBackground } from 'react-native'
 import { useState, useEffect } from 'react'
 import React from 'react'
 import axios from 'axios'
 import MapView, { AnimatedRegion, Callout, Circle, Marker } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
+import clear from '../assets/clear.png'
+import rainy from '../assets/rainy.png'
+import snowy from '../assets/snowy.png'
+import stormy from '../assets/stormy.png'
+import sunny from '../assets/sunny.png'
 
 const DetailsScreen = ({route, navigation}) => {
+
+    let KEY = "ccf2524bfcfe4db4b4dc42c2457fe054"
+
+    const [temperature, setTemperature] = useState("");
+    const [backgroundUrl, setBackground] = useState(null)
+
+    useEffect(() => {
+        async function fetchWeather(lat, lon) {
+            await axios
+            .get(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${KEY}&units=metric`)
+            .then((response) => {
+                console.log(response.data.weather[0].main);
+                setTemperature(response.data.main.temp);
+                if ( response.data.weather[0].main === "Rain") {
+                    setBackground(Image.resolveAssetSource(rainy).uri)
+                } else if (response.data.weather[0].main === "Clouds") {
+                    setBackground(Image.resolveAssetSource(clear).uri)
+                }
+
+            })
+            .catch(error => {
+                console.log(error)
+            });
+        }
+        fetchWeather(latitude, longitude)
+    }, []);
 
     const [ placeData, setplaceData ] = useState({});
   
@@ -71,6 +102,16 @@ const DetailsScreen = ({route, navigation}) => {
                             pinColor="#659136"
                         />
                     </MapView>
+                </View>
+                <View style={styles.weatherView}>
+                    <ImageBackground 
+                        source={{uri: backgroundUrl}}
+                        resizeMode="cover"
+                        style={styles.imageBackground}
+                        imageStyle={{ borderRadius: 25}}
+                    >
+                        <Text style={styles.weatherTemperatureText}>{temperature}{"\u00B0"} C</Text>
+                    </ImageBackground>
                 </View>
             </View>
         </ScrollView>
@@ -188,5 +229,32 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontWeight: "bold",
         color: "#007A3B"
+    },
+    weatherView: {
+        backgroundColor: "white",
+        width: "95%",
+        height: "12%",
+        marginTop: 10,
+        alignSelf: "center",
+        borderRadius: 25,
+        shadowOffset: {
+            width: 0,
+            height: 4,
+            },
+        shadowOpacity: 0.25,
+        shadowRadius: 5,
+        elevation: 5,
+        justifyContent: "center",
+        zIndex: 100
+    },
+    weatherTemperatureText: {
+        color: "white",
+        textAlign: "center",
+        fontSize: 25,
+        fontWeight: "bold"
+    },
+    imageBackground: {
+        height: "100%",
+        justifyContent: "center",
     }
 })
