@@ -22,7 +22,7 @@ const DetailsScreen = ({route, navigation}) => {
             await axios
             .get(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${KEY}&units=metric`)
             .then((response) => {
-                console.log(response.data.weather[0].main);
+                console.log(response.data.weather);
                 setTemperature(response.data.main.temp);
                 if ( response.data.weather[0].main === "Rain") {
                     setBackground(Image.resolveAssetSource(rainy).uri)
