@@ -2,13 +2,15 @@ import { StyleSheet, Text, View, Image, ScrollView, Pressable, ImageBackground }
 import { useState, useEffect } from 'react'
 import React from 'react'
 import axios from 'axios'
-import MapView, { AnimatedRegion, Callout, Circle, Marker } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import clear from '../assets/clear.png'
 import rainy from '../assets/rainy.png'
 import snowy from '../assets/snowy.png'
 import stormy from '../assets/stormy.png'
 import sunny from '../assets/sunny.png'
+import foggy from '../assets/foggy.png'
+import noCSunny from '../assets/noCSunny.png'
 
 const DetailsScreen = ({route, navigation}) => {
 
@@ -26,8 +28,26 @@ const DetailsScreen = ({route, navigation}) => {
                 setTemperature(response.data.main.temp);
                 if ( response.data.weather[0].main === "Rain") {
                     setBackground(Image.resolveAssetSource(rainy).uri)
-                } else if (response.data.weather[0].main === "Clouds") {
+                } else if (response.data.weather[0].main === "Clouds" 
+                        && response.data.weather[0].description != "few clouds" ) {
                     setBackground(Image.resolveAssetSource(clear).uri)
+                } else if (response.data.weather[0].main === "Fog"
+                        || response.data.weather[0].main === "Mist"
+                        || response.data.weather[0].main === "Smoke"
+                        || response.data.weather[0].main === "Haze"
+                        || response.data.weather[0].main === "Dust") {
+                    setBackground(Image.resolveAssetSource(foggy).uri)
+                } else if ( response.data.weather[0].description === "few clouds" ) {
+                    setBackground(Image.resolveAssetSource(sunny).uri)
+                } else if ( response.data.weather[0].main === "Clear" ) {
+                    setBackground(Image.resolveAssetSource(noCSunny).uri)
+                } else if (response.data.weather[0].main === "Squall"
+                        || response.data.weather[0].main === "Tornado") {
+                    setBackground(Image.resolveAssetSource(stormy).uri)
+                } else if (response.data.weather[0].main === "Snow") {
+                    setBackground(Image.resolveAssetSource(snowy).uri)
+                } else if (response.data.weather[0].main === "Drizzle") {
+                    setBackground(Image.resolveAssetSource(stormy).uri)
                 }
 
             })
@@ -48,7 +68,7 @@ const DetailsScreen = ({route, navigation}) => {
                 setplaceData(response.data[route.params.paramA])
             })
         }
-        axoisGET();
+        axoisGET(); 
     }, []);
 
     const {latitude, longitude} = route.params.paramB;
@@ -64,8 +84,31 @@ const DetailsScreen = ({route, navigation}) => {
         }
     }
 
+    const hasMoreInfo = (moreInfo) => {
+        if (moreInfo != null) {
+            return (
+                <View>
+                    <Text style={styles.moreInfo}>More Info</Text>
+                    <Text style={styles.openStatusText}>{placeData.openingTimeStatus}</Text>
+                </View>
+            )
+        }
+    }
+
+    const hasSubtitle = (subtitle) => {
+        if (subtitle != null) {
+            let subtitle = placeData.subTitle;
+            if (subtitle.includes("near")){
+                subtitle = subtitle.replace("near", "");
+            }
+            return (
+                <Text style={styles.detailsTitle}>{subtitle}</Text>
+            )
+        }
+    }
+
     return (
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.container}>
                 <View style={styles.topView}>
                     <Image source={{ uri: placeData.imageUrl }} style={styles.image} accessibilityLabel={placeData.imageDescription}></Image>
@@ -76,9 +119,12 @@ const DetailsScreen = ({route, navigation}) => {
                         <Text style={styles.title} numberOfLines={1}>{placeData.title}</Text>
                     </View>
                 </View>
+                <View style={styles.descriptionView}>
+                    {hasSubtitle(placeData.subTitle)}
+                    <Text style={styles.detailsSubtitle}>{placeData.description}</Text>
+                </View>
                 <View style={styles.openStatusView}>
-                    <Text style={styles.moreInfo}>More Info</Text>
-                    <Text style={styles.openStatusText}>{placeData.openingTimeStatus}</Text>
+                    {hasMoreInfo(placeData.openingTimeStatus)}
                     {hasActivities(placeData.activityTagsAsCsv)}
                 </View>
                 <View style={styles.mapOuterView} >
@@ -88,11 +134,12 @@ const DetailsScreen = ({route, navigation}) => {
                         region={{
                             latitude: latitude,
                             longitude: longitude,
-                            latitudeDelta: 0.009,
-                            longitudeDelta: 0.005,
+                            latitudeDelta: 0.9,
+                            longitudeDelta: 0.5,
                         }}
                         showsCompass={false}
                         loadingEnabled={true}
+                        scrollEnabled={false}
                         >
                         <Marker
                             key={route.params.paramA}
@@ -123,8 +170,8 @@ export default DetailsScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingBottom: 30,
-        marginBottom: 100,
+        paddingBottom: 50,
+        marginBottom: 150,
     },
     topView: {
         backgroundColor: "white",
@@ -171,6 +218,38 @@ const styles = StyleSheet.create({
         position: "absolute",
         left: 0,
     },
+    descriptionView: {
+        backgroundColor: "#007A3B",
+        width: "95%",
+        height: "auto",
+        marginTop: 30,
+        paddingHorizontal: 5,
+        alignSelf: "center",
+        borderRadius: 25,
+        shadowOffset: {
+            width: 0,
+            height: 4,
+            },
+        shadowOpacity: 0.25,
+        shadowRadius: 5,
+        elevation: 5,
+        justifyContent: "center",
+        zIndex: 100
+    },
+    detailsSubtitle: {
+        marginBottom: 15,
+        marginTop: 10,
+        paddingHorizontal: 5,
+        color: "white",
+        textAlign: "center"
+    },
+    detailsTitle: {
+        textAlign: "center",
+        fontSize: 20,
+        fontWeight: "bold",
+        marginTop: 10,
+        color: "white"
+    },
     mapOuterView: {
         shadowOffset: {
             width: 0,
@@ -199,7 +278,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         width: "95%",
         height: "auto",
-        marginTop: 30,
+        marginTop: 10,
         alignSelf: "center",
         borderRadius: 25,
         shadowOffset: {

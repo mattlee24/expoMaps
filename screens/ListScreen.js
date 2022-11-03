@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Image, FlatList, TextInput } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Image, FlatList, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import TopList from '../components/topList';
@@ -92,13 +92,13 @@ const ListScreen = ({navigation, route}) => {
         keyExtractor={(item) => item.id}
         numColumns={2}
         renderItem={({ item }) => (
-          <Pressable style={styles.main} onPress={() => navigation.push("DetailsScreen", {paramA: item.id, paramB: item.location})}>
+          <TouchableOpacity style={styles.main} onPress={() => navigation.push("DetailsScreen", {paramA: item.id, paramB: item.location})}>
             <Image source={{ uri: item.imageUrl }} style={styles.image}></Image>
             <View style={styles.card}>
                 <Text style={styles.texttitle}>{item.title}</Text>
                 <Text numberOfLines={2} style={styles.textsubtitle}>{item.description}</Text>
             </View>
-          </Pressable>
+          </TouchableOpacity>
         )}
         //refreshing={refreshing}
       />
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   main: {
     width: "48%",
     margin: 4,
-    height: "auto"
+    height: "auto",
   },
   image: {
     width: "100%",

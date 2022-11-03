@@ -33,7 +33,7 @@ const MapScreen = ({navigation}) => {
     text = errorMsg;
   } else if (location) {
     text = JSON.stringify(location);
-    //console.log(location)
+    // console.log(location.coords.latitude)
   }
 
     const [ nationalData, setnationalData ] = useState({})
@@ -157,8 +157,5 @@ const styles = StyleSheet.create({
         color: "white",
         margin: 5
       },
-      callout: {
-        
-      }
 })
 
