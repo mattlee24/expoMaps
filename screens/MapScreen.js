@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useRef } from 'react';
 import { useState, useEffect } from 'react';
 import MapView from 'react-native-map-clustering';
 import { Callout, Marker } from 'react-native-maps';
@@ -69,6 +70,19 @@ const MapScreen = ({navigation}) => {
     
     calculateDistance();
 
+    const mapRef = useRef();
+
+    const animateToRegion = (latitude, longitude) => {
+      let region = {
+        latitude: latitude,
+        longitude: longitude,
+        latitudeDelta: 0.0222,
+        longitudeDelta: 0.0221,
+      };
+  
+      mapRef.current.animateToRegion(region, 2000);
+    };
+
     return (
         <View style={{flex: 0, backgroundColor: "white"}}>
         <GooglePlacesAutocomplete
@@ -84,12 +98,7 @@ const MapScreen = ({navigation}) => {
           onPress={(data, details = null) => {
             //'details' is provided when fetchDetails = true 
             //console.log(details);
-            setRegion({
-              latitude: details.geometry.location.lat,
-              longitude: details.geometry.location.lng,
-              latitudeDelta: 0.0222,
-              longitudeDelta: 0.0221,
-            })
+            animateToRegion(details.geometry.location.lat, details.geometry.location.lng)
           }}
           query={{
             key: "AIzaSyD60HFa9mBuqDJ_KAlwysZGEkB764K4UbU",
@@ -103,6 +112,7 @@ const MapScreen = ({navigation}) => {
         />
     
         <MapView 
+          ref={mapRef}
           style={styles.map} 
           initialRegion={region}
           clusterColor={"#007A3B"}
