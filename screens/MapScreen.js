@@ -81,7 +81,7 @@ const MapScreen = ({navigation}) => {
             rankby: "distance",
           }}
           onPress={(data, details = null) => {
-            //'details' is provided when fetchDetails = true
+            //'details' is provided when fetchDetails = true 
             //console.log(details);
             setRegion({
               latitude: details.geometry.location.lat,
@@ -97,7 +97,7 @@ const MapScreen = ({navigation}) => {
           }}
           styles = {{
             container: { flex: 0, position: "absolute", zIndex: 1, marginTop: 60, margin: 10, width: "95%"},
-            listView: { backgroundColor: "white" }
+            listView: { backgroundColor: "white", borderRadius: 25 }
           }}
         />
     

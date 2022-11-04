@@ -13,7 +13,7 @@ export default TopList
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#659136",
+        backgroundColor: "#007A3B",
         width: "100%",
         height: "auto",
     },
