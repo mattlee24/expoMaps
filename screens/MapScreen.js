@@ -76,8 +76,8 @@ const MapScreen = ({navigation}) => {
       let region = {
         latitude: latitude,
         longitude: longitude,
-        latitudeDelta: 0.0522,
-        longitudeDelta: 0.0522,
+        latitudeDelta: 0.0222,
+        longitudeDelta: 0.0222,
       };
   
       mapRef.current.animateToRegion(region, 2000);
