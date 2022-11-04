@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import MapView, { AnimatedRegion, Callout, Circle, Marker } from 'react-native-maps';
+import MapView from 'react-native-map-clustering';
+import { Callout, Marker } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, useColorScheme, Image, Button, Pressable, Alert} from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import axios from 'axios';
@@ -103,7 +104,8 @@ const MapScreen = ({navigation}) => {
     
         <MapView 
           style={styles.map} 
-          region={region}
+          initialRegion={region}
+          clusterColor={"#007A3B"}
           showsCompass={false}
           userInterfaceStyle={isDarkMode ? "dark" : "light"}
           loadingEnabled={true}
@@ -116,7 +118,7 @@ const MapScreen = ({navigation}) => {
               coordinate={index.location}
               width={"auto"}
               height={"auto"}
-              pinColor="#659136"
+              pinColor="#007A3B"
               onCalloutPress={() => navigation.push("DetailsScreen", {paramA: index.id, paramB: index.location})}
             >
               <Callout style={styles.callout}>
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
       },
       calloutButton: {
-        backgroundColor: "#659136",
+        backgroundColor: "#007A3B",
         alignItems: "center",
         borderRadius: 25,
       },
