@@ -107,7 +107,10 @@ const MapScreen = ({navigation}) => {
           }}
           styles = {{
             container: { flex: 0, position: "absolute", zIndex: 1, marginTop: 60, margin: 10, width: "95%"},
-            listView: { backgroundColor: "white", borderRadius: 25 }
+            listView: { backgroundColor: "white", borderRadius: 25 },
+            poweredContainer: {
+              display: "none"
+            }
           }}
         />
     
