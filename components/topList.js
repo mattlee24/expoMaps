@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const TopList = () => {
+const TopList = () => { // component for displaying text above lsit screen
   return (
     <View style={styles.container}>
         <Text style={styles.textStyle}>DISCOVER A WORLD OF NATIONAL TRUST</Text>
@@ -11,7 +11,7 @@ const TopList = () => {
 
 export default TopList
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ // styling for component
     container: {
         backgroundColor: "#007A3B",
         width: "100%",

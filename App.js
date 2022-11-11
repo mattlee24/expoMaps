@@ -9,7 +9,7 @@ import DetailsScreen from './screens/DetailsScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-function ListDetails() {
+function ListDetails() { //navigator for navigating between listScreen and DetailsScreen
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator screenOptions={() => ({headerShown: false})}>
@@ -19,7 +19,7 @@ function ListDetails() {
   )
 }
 
-function MapDetails() {
+function MapDetails() { //navigator for navigating between mapScreen and DetailsScreen
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator screenOptions={() => ({headerShown: false})}>
@@ -29,14 +29,14 @@ function MapDetails() {
   )
 }
 
-export default function App() {
+export default function App() { 
 
   const Tab = createBottomTabNavigator();
 
   /* const colourScheme = useColorScheme();
   const isDarkMode = colourScheme === "dark"; */
 
-  return (
+  return ( // Bottom tab navigator used for navigating between the main screens (mapScreen and ListScreen)
     <NavigationContainer>
       <Tab.Navigator
         initialRouteName='MapScreen'
@@ -84,7 +84,7 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ //Provides all the styling for the page (In this case just the shadow effect for the bottom navigation bar)
   // container: {
   //   flex: 1,
   //   backgroundColor: '#fff',

@@ -11,9 +11,9 @@ const ListScreen = ({navigation, route}) => {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 
-    useEffect(() => {
-      (async () => {
-        
+    useEffect(() => { //useEffect function used to gain the users permission for their location.
+      (async () => {  // The app will run regardless, it just allows the user to see where they are on the map...
+                      // ... in relation to national trust places
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
           setErrorMsg('Permission to access location was denied');
@@ -33,11 +33,13 @@ const ListScreen = ({navigation, route}) => {
       //console.log(location)
     }
 
+    // useState variables used to store data
     const [ nationalData, setnationalData ] = useState({})
-    const [ refreshing, serRefreshing ] = useState(false)
+    const [ refreshing, serRefreshing ] = useState(false) // used to refresh flatList
     const [value, onChangeText] = useState('')
     const [ localData, setlocalData ] = useState({})
-  
+
+    // axios and use effect function used here to pull data from national trust 
     const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
 
     useEffect(() => {
@@ -47,7 +49,7 @@ const ListScreen = ({navigation, route}) => {
       })
     }, [])
 
-    const handleSearch = (text) => { 
+    const handleSearch = (text) => {  //Allows flatList to be filtered (seachred)
       //console.log(text)
       onChangeText(text);
       let items = localData;
@@ -65,8 +67,8 @@ const ListScreen = ({navigation, route}) => {
       setnationalData(newData);
       }
 
-      const calculateDistance = () => {
-        var dis = getDistance(
+      const calculateDistance = () => { // This function isn't used, however, shows how its possible to calculate
+        var dis = getDistance(          //the users distance from a set longitude and latitude
           { latitude: 51.528308, longitude: -0.3817765 },
           { latitude: 51.528308, longitude: -0.3817765 }
         );
@@ -74,10 +76,10 @@ const ListScreen = ({navigation, route}) => {
       };
       
       calculateDistance();
-  return (
+  return ( // Returns the views and flatlist for the page
     <View style={styles.container}>
       <TopList />
-      <TextInput
+      <TextInput // Input used to call the search function(filtering the list)
         style={styles.textInputStyle}
         onChangeText={(text) => handleSearch(text)}
         underlineColorAndroid="transparent"
@@ -85,8 +87,8 @@ const ListScreen = ({navigation, route}) => {
         placeholder="Search by name..."
         placeholderTextColor={"grey"}
       />
-      <FlatList 
-        style={styles.flatlist}
+      <FlatList // Flatlist that takes in the data that axois got and displays it within a touchable opacity 
+        style={styles.flatlist} 
         data={nationalData}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id}
@@ -108,7 +110,7 @@ const ListScreen = ({navigation, route}) => {
 
 export default ListScreen
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ //Provides all the styling for the page
   container: {
     flex: 1,
   },

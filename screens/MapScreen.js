@@ -11,12 +11,10 @@ import { getDistance } from 'geolib';
 
 const MapScreen = ({navigation}) => {
 
-  //Enables Permissions to show user location
-
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
-  useEffect(() => {
+  useEffect(() => { //useEffect function used to gain the users permission for their location.
     (async () => {
       
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -50,7 +48,7 @@ const MapScreen = ({navigation}) => {
 
     //console.log(nationalData)
 
-    const [region, setRegion] = useState({
+    const [region, setRegion] = useState({ // sets the default view for the map on first load of the application
         latitude: 55.378051,
         longitude: -3.435973,
         latitudeDelta: 10,
@@ -60,7 +58,7 @@ const MapScreen = ({navigation}) => {
     const colourScheme = useColorScheme();
     const isDarkMode = colourScheme === "dark";
 
-    const calculateDistance = () => {
+    const calculateDistance = () => { // calculates distance from user and given location
       var dis = getDistance(
         { latitude: 51.528308, longitude: -0.3817765 },
         { latitude: 51.528308, longitude: -0.3817765 }
@@ -73,19 +71,19 @@ const MapScreen = ({navigation}) => {
     const mapRef = useRef();
 
     const animateToRegion = (latitude, longitude) => {
-      let region = {
+      let region = { // when GooglePlacesAutoComplete gets an input, the map will animate to the location passed
         latitude: latitude,
         longitude: longitude,
         latitudeDelta: 0.0222,
         longitudeDelta: 0.0222,
       };
   
-      mapRef.current.animateToRegion(region, 2000);
+      mapRef.current.animateToRegion(region, 2000); // the time it takes for the animation to complete
     };
 
     return (
         <View style={{flex: 0, backgroundColor: "white"}}>
-        <GooglePlacesAutocomplete
+        <GooglePlacesAutocomplete //Used to search the map
           placeholder='Search...'
           textInputProps={{
             placeholderTextColor: "grey"
@@ -103,9 +101,9 @@ const MapScreen = ({navigation}) => {
           query={{
             key: "AIzaSyD60HFa9mBuqDJ_KAlwysZGEkB764K4UbU",
             language: 'en',
-            components: 'country:uk',
+            components: 'country:uk', //set uk as boundry for searches 
           }}
-          styles = {{
+          styles = {{ // styling for the seatch component and the corrosponding list displayed upon typing
             container: { flex: 0, position: "absolute", zIndex: 1, marginTop: 60, margin: 10, width: "95%"},
             listView: { backgroundColor: "white", borderRadius: 25 },
             poweredContainer: {
@@ -114,10 +112,10 @@ const MapScreen = ({navigation}) => {
           }}
         />
     
-        <MapView 
+        <MapView //map view
           ref={mapRef}
           style={styles.map} 
-          initialRegion={region}
+          initialRegion={region} // initial region set from component declared earlier
           clusterColor={"#007A3B"}
           showsCompass={false}
           userInterfaceStyle={isDarkMode ? "dark" : "light"}
@@ -125,16 +123,15 @@ const MapScreen = ({navigation}) => {
           showsUserLocation={true}
         >
           {Object.values(nationalData).map(index => {
-            return <Marker
-              //onPress={() => navigation.navigate("DetailsScreen")}
-              key={index.id} 
-              coordinate={index.location}
+            return <Marker //When the marker is pressed a button will be displayed which allows 
+              key={index.id} // the user to find out more information on that particular place
+              coordinate={index.location} // (navigating to the details screen)
               width={"auto"}
               height={"auto"}
-              pinColor="#007A3B"
+              pinColor="#007A3B"                                     // perameters passed to the details screen
               onCalloutPress={() => navigation.push("DetailsScreen", {paramA: index.id, paramB: index.location})}
-            >
-              <Callout style={styles.callout}>
+            >                                       
+              <Callout style={styles.callout}>{/* displays when the marker is pressed */}
                 <Text style={styles.calloutTitle}>{index.title}</Text>
                 <Pressable style={styles.calloutButton}>
                   <Text style={styles.calloutText}>Find More</Text>
@@ -149,7 +146,7 @@ const MapScreen = ({navigation}) => {
 
 export default MapScreen
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ //styling for the page
     container: {
         flex: 1,
         backgroundColor: '#fff',

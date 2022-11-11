@@ -14,12 +14,12 @@ import noCSunny from '../assets/noCSunny.png'
 
 const DetailsScreen = ({route, navigation}) => {
 
-    let KEY = "ccf2524bfcfe4db4b4dc42c2457fe054"
+    let KEY = "ccf2524bfcfe4db4b4dc42c2457fe054" //API Key for Openweathermap 
 
     const [temperature, setTemperature] = useState("");
     const [backgroundUrl, setBackground] = useState(null)
 
-    useEffect(() => {
+    useEffect(() => { //Useeffect await function gets data from open weather and sets background of particular view accordingly
         async function fetchWeather(lat, lon) {
             await axios
             .get(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${KEY}&units=metric`)
@@ -58,23 +58,23 @@ const DetailsScreen = ({route, navigation}) => {
         fetchWeather(latitude, longitude)
     }, []);
 
-    const [ placeData, setplaceData ] = useState({});
+    const [ placeData, setplaceData ] = useState({}); //Variable set for containg all data from NT All-place data
   
     const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
-
+    //Above is the link used to obtain NT data
     useEffect(() => {
         const axoisGET = async () => {
             await axiosInstance.get().then((response) => {
-                setplaceData(response.data[route.params.paramA])
+                setplaceData(response.data[route.params.paramA])//Set data to variable initialised above
             })
         }
         axoisGET(); 
     }, []);
 
-    const {latitude, longitude} = route.params.paramB;
+    const {latitude, longitude} = route.params.paramB; //set Longitude and Latitude from data passed from the "listScreen"
 
-    const hasActivities = (activites) => {
-        if (activites != null) {
+    const hasActivities = (activites) => { //function used to establish if a data item contains activities
+        if (activites != null) {           //Displays or doesn't display view depending on the condition
             return (
                 <View>
                     <Text style={styles.activitesTitle}>Activies:</Text>
@@ -84,8 +84,8 @@ const DetailsScreen = ({route, navigation}) => {
         }
     }
 
-    const hasMoreInfo = (moreInfo) => {
-        if (moreInfo != null) {
+    const hasMoreInfo = (moreInfo) => { //function used to establish if a data item contains more info
+        if (moreInfo != null) {         //Displays or doesn't display view depending on the condition
             return (
                 <View>
                     <Text style={styles.moreInfo}>More Info</Text>
@@ -95,8 +95,8 @@ const DetailsScreen = ({route, navigation}) => {
         }
     }
 
-    const hasSubtitle = (subtitle) => {
-        if (subtitle != null) {
+    const hasSubtitle = (subtitle) => { //function used to establish whats contained within the "subtitle"
+        if (subtitle != null) {         //Removes the word "near" if found within the subtitle
             let subtitle = placeData.subTitle;
             if (subtitle.includes("near")){
                 subtitle = subtitle.replace("near", "");
@@ -107,8 +107,8 @@ const DetailsScreen = ({route, navigation}) => {
         }
     }
 
-    return (
-        <ScrollView showsVerticalScrollIndicator={false}>
+    return ( //The main view of the page - contains everything that's displayed
+        <ScrollView showsVerticalScrollIndicator={false}> 
             <View style={styles.container}>
                 <View style={styles.topView}>
                     <Image source={{ uri: placeData.imageUrl }} style={styles.image} accessibilityLabel={placeData.imageDescription}></Image>
@@ -120,7 +120,7 @@ const DetailsScreen = ({route, navigation}) => {
                     </View>
                 </View>
                 <View style={styles.descriptionView}>
-                    {hasSubtitle(placeData.subTitle)}
+                    {hasSubtitle(placeData.subTitle)} {/* Whats displyed here depends on the function being called */}
                     <Text style={styles.detailsSubtitle}>{placeData.description}</Text>
                 </View>
                 <View style={styles.openStatusView}>
@@ -128,7 +128,7 @@ const DetailsScreen = ({route, navigation}) => {
                     {hasActivities(placeData.activityTagsAsCsv)}
                 </View>
                 <View style={styles.mapOuterView} >
-                    <MapView 
+                    <MapView //Displays a map within this view - uses React Native Map View
                         mapType={"mutedStandard"}
                         style={styles.map}
                         region={{
@@ -141,7 +141,7 @@ const DetailsScreen = ({route, navigation}) => {
                         loadingEnabled={true}
                         scrollEnabled={false}
                         >
-                        <Marker
+                        <Marker //Displays a "pin" on the map, the coordinates given by the data passed from the "listScreen"
                             key={route.params.paramA}
                             coordinate={route.params.paramB}
                             width={"auto"}
@@ -151,8 +151,8 @@ const DetailsScreen = ({route, navigation}) => {
                     </MapView>
                 </View>
                 <View style={styles.weatherView}>
-                    <ImageBackground 
-                        source={{uri: backgroundUrl}}
+                    <ImageBackground //Sets the background of this view
+                        source={{uri: backgroundUrl}} // The background is decided from the function declared earlier
                         resizeMode="cover"
                         style={styles.imageBackground}
                         imageStyle={{ borderRadius: 25}}
@@ -167,7 +167,7 @@ const DetailsScreen = ({route, navigation}) => {
 
 export default DetailsScreen
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ //Provides all the styling for the page
     container: {
         flex: 1,
         paddingBottom: 50,
