@@ -8,6 +8,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import axios from 'axios';
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
+import data from '../components/all-places.json';
 
 const MapScreen = ({navigation}) => {
 
@@ -38,13 +39,17 @@ const MapScreen = ({navigation}) => {
 
     const [ nationalData, setnationalData ] = useState({})
   
-    const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
+    // const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
+
+    // useEffect(() => {
+    //     axiosInstance.get().then((response) => {
+    //         setnationalData(response.data)
+    //     })
+    // }, [])
 
     useEffect(() => {
-        axiosInstance.get().then((response) => {
-            setnationalData(response.data)
-        })
-    }, [])
+      setnationalData(Object.values(data))
+    }, []);
 
     //console.log(nationalData)
 

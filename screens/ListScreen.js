@@ -5,6 +5,7 @@ import TopList from '../components/topList';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
+import data from '../components/all-places.json';
 
 const ListScreen = ({navigation, route}) => {
 
@@ -40,14 +41,18 @@ const ListScreen = ({navigation, route}) => {
     const [ localData, setlocalData ] = useState({})
 
     // axios and use effect function used here to pull data from national trust 
-    const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
+    // const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
+
+    // useEffect(() => {
+    //   axiosInstance.get().then((response) => {
+    //       setnationalData(Object.values(response.data))
+    //       setlocalData(Object.values(response.data))
+    //   })
+    // }, [])
 
     useEffect(() => {
-      axiosInstance.get().then((response) => {
-          setnationalData(Object.values(response.data))
-          setlocalData(Object.values(response.data))
-      })
-    }, [])
+      setnationalData(Object.values(data))
+    }, []);
 
     const handleSearch = (text) => {  //Allows flatList to be filtered (seachred)
       //console.log(text)

@@ -11,6 +11,7 @@ import stormy from '../assets/stormy.png'
 import sunny from '../assets/sunny.png'
 import foggy from '../assets/foggy.png'
 import noCSunny from '../assets/noCSunny.png'
+import data from '../components/all-places.json';
 
 const DetailsScreen = ({route, navigation}) => {
 
@@ -60,52 +61,59 @@ const DetailsScreen = ({route, navigation}) => {
 
     const [ placeData, setplaceData ] = useState({}); //Variable set for containg all data from NT All-place data
   
-    const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
-    //Above is the link used to obtain NT data
+    // const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
+    // //Above is the link used to obtain NT data
+    // useEffect(() => {
+    //     const axoisGET = async () => {
+    //         await axiosInstance.get().then((response) => {
+    //             setplaceData(response.data[route.params.paramA])//Set data to variable initialised above
+    //         })
+    //     }
+    //     axoisGET(); 
+    // }, []);
+
     useEffect(() => {
-        const axoisGET = async () => {
-            await axiosInstance.get().then((response) => {
-                setplaceData(response.data[route.params.paramA])//Set data to variable initialised above
-            })
-        }
-        axoisGET(); 
-    }, []);
+        console.log(data[route.params.paramA])
+        setplaceData(data[route.params.paramA])
+      }, []);
 
     const {latitude, longitude} = route.params.paramB; //set Longitude and Latitude from data passed from the "listScreen"
 
-    const hasActivities = (activites) => { //function used to establish if a data item contains activities
-        if (activites != null) {           //Displays or doesn't display view depending on the condition
-            return (
-                <View>
-                    <Text style={styles.activitesTitle}>Activies:</Text>
-                    <Text style={styles.openStatusText}>{placeData.activityTagsAsCsv}</Text>
-                </View>
-            )
-        }
-    }
+    // const hasActivities = (activites) => { //function used to establish if a data item contains activities
+    //     if (activites != null) {           //Displays or doesn't display view depending on the condition
+    //         return (
+    //             <View>
+    //                 <Text style={styles.activitesTitle}>Activies:</Text>
+    //                 <Text style={styles.openStatusText}>{placeData.activityTagsAsCsv}</Text>
+    //             </View>
+    //         )
+    //     }
+    // }
 
-    const hasMoreInfo = (moreInfo) => { //function used to establish if a data item contains more info
-        if (moreInfo != null) {         //Displays or doesn't display view depending on the condition
-            return (
-                <View>
-                    <Text style={styles.moreInfo}>More Info</Text>
-                    <Text style={styles.openStatusText}>{placeData.openingTimeStatus}</Text>
-                </View>
-            )
-        }
-    }
+    // const hasMoreInfo = (moreInfo) => { //function used to establish if a data item contains more info
+    //     if (moreInfo != null) {         //Displays or doesn't display view depending on the condition
+    //         return (
+    //             <View>
+    //                 <Text style={styles.moreInfo}>More Info</Text>
+    //                 <Text style={styles.openStatusText}>{placeData.openingTimeStatus}</Text>
+    //             </View>
+    //         )
+    //     }
+    // }
 
-    const hasSubtitle = (subtitle) => { //function used to establish whats contained within the "subtitle"
-        if (subtitle != null) {         //Removes the word "near" if found within the subtitle
-            let subtitle = placeData.subTitle;
-            if (subtitle.includes("near")){
-                subtitle = subtitle.replace("near", "");
-            }
-            return (
-                <Text style={styles.detailsTitle}>{subtitle}</Text>
-            )
-        }
-    }
+    // const hasSubtitle = (placeData) => { //function used to establish whats contained within the "subtitle"
+    //     if (placeData.subTitle != null) {
+    //         if (placeData.subTitle.includes("near"))         //Removes the word "near" if found within the subtitle
+    //             placeData.subTitle = placeData.subTitle.replace("near", "");
+    //         return (
+    //             <Text style={styles.detailsTitle}>{placeData.subTitle}</Text>
+    //         )
+    //     } else if (placeData.subTitle == null) {
+    //         return (
+    //             <Text style={styles.detailsTitle}>Nothing</Text>
+    //         )
+    //     }
+    // }
 
     return ( //The main view of the page - contains everything that's displayed
         <ScrollView showsVerticalScrollIndicator={false}> 
@@ -120,12 +128,14 @@ const DetailsScreen = ({route, navigation}) => {
                     </View>
                 </View>
                 <View style={styles.descriptionView}>
-                    {hasSubtitle(placeData.subTitle)} {/* Whats displyed here depends on the function being called */}
+                    <Text style={styles.detailsTitle}>{placeData.subTitle}</Text>
                     <Text style={styles.detailsSubtitle}>{placeData.description}</Text>
                 </View>
                 <View style={styles.openStatusView}>
-                    {hasMoreInfo(placeData.openingTimeStatus)}
-                    {hasActivities(placeData.activityTagsAsCsv)}
+                    <Text style={styles.moreInfo}>More Info</Text>
+                    <Text style={styles.openStatusText}>{placeData.openingTimeStatus}</Text>
+                    <Text style={styles.activitesTitle}>Activies:</Text>
+                    <Text style={styles.openStatusText}>{placeData.activityTagsAsCsv}</Text>
                 </View>
                 <View style={styles.mapOuterView} >
                     <MapView //Displays a map within this view - uses React Native Map View
