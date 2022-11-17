@@ -57,9 +57,10 @@ const DetailsScreen = ({route, navigation}) => {
             });
         }
         fetchWeather(latitude, longitude)
+        console.log("weather fetched")
     }, []);
 
-    const [ placeData, setplaceData ] = useState({}); //Variable set for containg all data from NT All-place data
+    const [ placeData, setplaceData ] = useState(); //Variable set for containg all data from NT All-place data
   
     // const axiosInstance = axios.create({ baseURL: 'https://www.nationaltrust.org.uk/search/data/all-places' });
     // //Above is the link used to obtain NT data
@@ -79,42 +80,44 @@ const DetailsScreen = ({route, navigation}) => {
 
     const {latitude, longitude} = route.params.paramB; //set Longitude and Latitude from data passed from the "listScreen"
 
-    // const hasActivities = (activites) => { //function used to establish if a data item contains activities
-    //     if (activites != null) {           //Displays or doesn't display view depending on the condition
-    //         return (
-    //             <View>
-    //                 <Text style={styles.activitesTitle}>Activies:</Text>
-    //                 <Text style={styles.openStatusText}>{placeData.activityTagsAsCsv}</Text>
-    //             </View>
-    //         )
-    //     }
-    // }
+    const hasActivities = (activites) => { //function used to establish if a data item contains activities
+        if (activites != null) {           //Displays or doesn't display view depending on the condition
+            return (
+                <View>
+                    <Text style={styles.activitesTitle}>Activies:</Text>
+                    <Text style={styles.openStatusText}>{activites}</Text>
+                </View>
+            )
+        }
+    }
 
-    // const hasMoreInfo = (moreInfo) => { //function used to establish if a data item contains more info
-    //     if (moreInfo != null) {         //Displays or doesn't display view depending on the condition
-    //         return (
-    //             <View>
-    //                 <Text style={styles.moreInfo}>More Info</Text>
-    //                 <Text style={styles.openStatusText}>{placeData.openingTimeStatus}</Text>
-    //             </View>
-    //         )
-    //     }
-    // }
+    const hasMoreInfo = (moreInfo) => { //function used to establish if a data item contains more info
+        if (moreInfo != null) {         //Displays or doesn't display view depending on the condition
+            return (
+                <View>
+                    <Text style={styles.moreInfo}>More Info</Text>
+                    <Text style={styles.openStatusText}>{moreInfo}</Text>
+                </View>
+            )
+        }
+    }
 
-    // const hasSubtitle = (placeData) => { //function used to establish whats contained within the "subtitle"
-    //     if (placeData.subTitle != null) {
-    //         if (placeData.subTitle.includes("near"))         //Removes the word "near" if found within the subtitle
-    //             placeData.subTitle = placeData.subTitle.replace("near", "");
-    //         return (
-    //             <Text style={styles.detailsTitle}>{placeData.subTitle}</Text>
-    //         )
-    //     } else if (placeData.subTitle == null) {
-    //         return (
-    //             <Text style={styles.detailsTitle}>Nothing</Text>
-    //         )
-    //     }
-    // }
+    const hasSubtitle = (subTitle) => { //function used to establish whats contained within the "subtitle"
+        if (subTitle != null) {
+            if (subTitle.includes("near"))         //Removes the word "near" if found within the subtitle
+                subTitle = subTitle.replace("near", "");
+            return (
+                <Text style={styles.detailsTitle}>{subTitle}</Text>
+            )
+        } else if (subTitle == null) {
+            return (
+                <Text style={styles.detailsTitle}>{subTitle}</Text>
+            )
+        }
+    }
 
+    if (placeData) 
+    {
     return ( //The main view of the page - contains everything that's displayed
         <ScrollView showsVerticalScrollIndicator={false}> 
             <View style={styles.container}>
@@ -128,14 +131,17 @@ const DetailsScreen = ({route, navigation}) => {
                     </View>
                 </View>
                 <View style={styles.descriptionView}>
-                    <Text style={styles.detailsTitle}>{placeData.subTitle}</Text>
+                    {hasSubtitle(placeData.subTitle)}
+                    {/* <Text style={styles.detailsTitle}>{placeData.subTitle}</Text> */}
                     <Text style={styles.detailsSubtitle}>{placeData.description}</Text>
                 </View>
                 <View style={styles.openStatusView}>
-                    <Text style={styles.moreInfo}>More Info</Text>
-                    <Text style={styles.openStatusText}>{placeData.openingTimeStatus}</Text>
-                    <Text style={styles.activitesTitle}>Activies:</Text>
-                    <Text style={styles.openStatusText}>{placeData.activityTagsAsCsv}</Text>
+                    {hasMoreInfo(placeData.openingTimeStatus)}
+                    {/* <Text style={styles.moreInfo}>More Info</Text>
+                    <Text style={styles.openStatusText}>{placeData.openingTimeStatus}</Text> */}
+                    {hasActivities(placeData.activityTagsAsCsv)}
+                    {/* <Text style={styles.activitesTitle}>Activies:</Text>
+                    <Text style={styles.openStatusText}>{placeData.activityTagsAsCsv}</Text> */}
                 </View>
                 <View style={styles.mapOuterView} >
                     <MapView //Displays a map within this view - uses React Native Map View
@@ -173,6 +179,7 @@ const DetailsScreen = ({route, navigation}) => {
             </View>
         </ScrollView>
     )
+}
 }
 
 export default DetailsScreen

@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, Pressable, Image, FlatList, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import axios from 'axios';
 import TopList from '../components/topList';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Location from 'expo-location';

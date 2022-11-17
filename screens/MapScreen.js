@@ -5,7 +5,6 @@ import MapView from 'react-native-map-clustering';
 import { Callout, Marker } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, useColorScheme, Image, Button, Pressable, Alert} from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import axios from 'axios';
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
 import data from '../components/all-places.json';
