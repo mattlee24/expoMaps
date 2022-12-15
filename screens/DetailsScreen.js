@@ -15,7 +15,7 @@ import data from '../components/all-places.json';
 
 const DetailsScreen = ({route, navigation}) => {
 
-    let KEY = "ccf2524bfcfe4db4b4dc42c2457fe054" //API Key for Openweathermap 
+    let KEY = "###################" //API Key for Openweathermap 
 
     const [temperature, setTemperature] = useState("");
     const [backgroundUrl, setBackground] = useState(null)
