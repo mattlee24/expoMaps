@@ -103,7 +103,7 @@ const MapScreen = ({navigation}) => {
             animateToRegion(details.geometry.location.lat, details.geometry.location.lng)
           }}
           query={{
-            key: "AIzaSyD60HFa9mBuqDJ_KAlwysZGEkB764K4UbU",
+            key: "#######################",
             language: 'en',
             components: 'country:uk', //set uk as boundry for searches 
           }}
